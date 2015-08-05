@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import ar.com.martineo14.spotifystreamer2.ArtistDetailActivity;
 import ar.com.martineo14.spotifystreamer2.R;
 import ar.com.martineo14.spotifystreamer2.ui.adapter.ArtistListAdapter;
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -96,7 +97,7 @@ public class SearchArtistFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Artist artist = artistAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), ArtistDetailActivityFragment.class);
+                Intent intent = new Intent(getActivity(), ArtistDetailActivity.class);
                 intent.putExtra(ARTIST_ID, artist.id);
                 intent.putExtra(ARTIST_NAME, artist.name);
                 startActivity(intent);

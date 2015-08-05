@@ -19,6 +19,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ArtistDetailActivity"
+            android:label="@string/title_activity_artist_detail"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ar.com.martineo14.spotifystreamer2.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

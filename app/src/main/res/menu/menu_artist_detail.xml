@@ -14,11 +14,13 @@
   ~ limitations under the License.
   -->
 
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_artist_detail"
-    android:name="ar.com.martineo14.spotifystreamer2.ui.fragment.ArtistDetailActivityFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="beforeDescendants"
-    tools:layout="@layout/fragment_artist_detail" />
+    tools:context="ar.com.martineo14.spotifystreamer2.ArtistDetailActivity">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+</menu>
