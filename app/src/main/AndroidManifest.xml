@@ -27,6 +27,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ar.com.martineo14.spotifystreamer2.MainActivity" />
         </activity>
+        <activity
+            android:name=".TrackPlayerActivity"
+            android:label="@string/title_activity_track_player">
+        </activity>
     </application>
 
 </manifest>

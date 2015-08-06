@@ -6,4 +6,5 @@
     <string name="msg_no_artist_found">There is no Artist with that name, Please try with other name.</string>
     <string name="msg_artist_no_top_tracks">The Artist does not have a Top Ten track list.</string>
     <string name="msg_error_default">There is an error. Please try again.</string>
+    <string name="title_activity_track_player">TrackPlayerActivity</string>
 </resources>
