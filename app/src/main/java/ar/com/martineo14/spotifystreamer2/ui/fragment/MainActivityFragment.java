@@ -1,10 +1,12 @@
-package ar.com.martineo14.spotifystreamer2;
+package ar.com.martineo14.spotifystreamer2.ui.fragment;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import ar.com.martineo14.spotifystreamer2.R;
 
 
 /**

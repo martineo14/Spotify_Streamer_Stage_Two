@@ -7,21 +7,21 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ar.com.martineo14.spotifystreamer2.TrackPlayerActivityFragment">
+    tools:context="ar.com.martineo14.spotifystreamer2.ui.fragment.TrackPlayerActivityFragment">
 
     <TextView
         android:id="@+id/player_artist_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        tools:text="Coldplay" />
+        android:text="Coldplay" />
 
     <TextView
         android:id="@+id/player_album_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        tools:text="Ghost Stories" />
+        android:text="Ghost Stories" />
 
     <ImageView
         android:id="@+id/player_album_artwork"
@@ -29,14 +29,14 @@
         android:layout_height="match_parent"
         android:layout_weight="5"
         android:scaleType="centerCrop"
-        tools:src="@drawable/placeholder_music" />
+        android:src="@drawable/placeholder_music" />
 
     <TextView
         android:id="@+id/player_track_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        tools:text="A Sky Full of Stars" />
+        android:text="A Sky Full of Stars" />
 
     <SeekBar
         android:id="@+id/player_seekbar"
@@ -63,6 +63,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@android:drawable/ic_media_play" />
+
+        <ImageButton
+            android:id="@+id/player_media_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_media_pause" />
 
         <ImageButton
             android:id="@+id/player_media_next"

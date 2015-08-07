@@ -5,7 +5,7 @@
     android:baselineAligned="false"
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
-    tools:context="ar.com.martineo14.spotifystreamer2.MainActivity">
+    tools:context="ar.com.martineo14.spotifystreamer2.ui.activity.MainActivity">
 
     <!--
     This layout is a two-pane layout for the Items master/detail flow.

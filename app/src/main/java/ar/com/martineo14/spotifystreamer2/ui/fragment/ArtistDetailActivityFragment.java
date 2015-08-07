@@ -23,6 +23,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.martineo14.spotifystreamer2.R;
+import ar.com.martineo14.spotifystreamer2.data.model.TrackModel;
 import ar.com.martineo14.spotifystreamer2.ui.adapter.ArtistTracksListAdapter;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
@@ -44,11 +46,13 @@ import kaaes.spotify.webapi.android.models.Tracks;
 public class ArtistDetailActivityFragment extends Fragment {
 
     public static final String ARTIST_ID = "artist_id";
+    public static final String ARTIST_NAME = "artist_name";
     private static final String LOG_TAG = ArtistDetailActivityFragment.class.getSimpleName();
     List<Track> tracksResult;
     private ArtistTracksListAdapter tracksListAdapter;
     private ListView listView;
     private String mArtistIDStr;
+    private String mArtistNameSrt;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,11 +67,34 @@ public class ArtistDetailActivityFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         if (intent != null && intent.hasExtra(ARTIST_ID)) {
             mArtistIDStr = intent.getStringExtra(ARTIST_ID);
+            mArtistNameSrt = intent.getStringExtra(ARTIST_NAME);
             listView = (ListView) rootView.findViewById(R.id.list_artist_top_ten);
             ArtistTopTenTask artistTopTenTask = new ArtistTopTenTask();
             artistTopTenTask.execute(mArtistIDStr);
         }
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Track track = tracksListAdapter.getItem(position);
+                TrackModel trackModel = new TrackModel(mArtistIDStr, mArtistNameSrt, track.album.name,
+                        track.album.images.get(0).url, track.id, track.name, track.preview_url);
+//                Intent intent = new Intent(getActivity(), TrackPlayerActivity.class);
+//                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("trackModel", trackModel);
+                TrackPlayerActivityFragment playerActivityFragment = new TrackPlayerActivityFragment();
+                playerActivityFragment.setArguments(bundle);
+                playerActivityFragment.show(getFragmentManager(), "dialog");
+            }
+        });
     }
 
     @Override

@@ -29,8 +29,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import ar.com.martineo14.spotifystreamer2.ArtistDetailActivity;
 import ar.com.martineo14.spotifystreamer2.R;
+import ar.com.martineo14.spotifystreamer2.ui.activity.ArtistDetailActivity;
 import ar.com.martineo14.spotifystreamer2.ui.adapter.ArtistListAdapter;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;

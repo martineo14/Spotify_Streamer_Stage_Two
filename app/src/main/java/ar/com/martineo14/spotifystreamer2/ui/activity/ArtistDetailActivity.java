@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ar.com.martineo14.spotifystreamer2;
+package ar.com.martineo14.spotifystreamer2.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +22,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import ar.com.martineo14.spotifystreamer2.R;
 
 
 public class ArtistDetailActivity extends ActionBarActivity {
