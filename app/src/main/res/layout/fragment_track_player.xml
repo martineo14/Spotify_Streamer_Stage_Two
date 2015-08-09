@@ -38,12 +38,33 @@
         android:gravity="center"
         android:text="A Sky Full of Stars" />
 
-    <SeekBar
-        android:id="@+id/player_seekbar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:max="100"
-        android:paddingBottom="10dip" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <SeekBar
+            android:id="@+id/player_seekbar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:max="30" />
+
+        <TextView
+            android:id="@+id/player_track_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/player_seekbar"
+            android:text="0:00" />
+
+        <TextView
+            android:id="@+id/player_final_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/player_seekbar"
+            android:text="0:30" />
+    </RelativeLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -72,6 +72,15 @@ public class ArtistDetailActivityFragment extends Fragment {
             ArtistTopTenTask artistTopTenTask = new ArtistTopTenTask();
             artistTopTenTask.execute(mArtistIDStr);
         }
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mArtistIDStr = bundle.getString(ARTIST_ID);
+            mArtistNameSrt = bundle.getString(ARTIST_NAME);
+            listView = (ListView) rootView.findViewById(R.id.list_artist_top_ten);
+            ArtistTopTenTask artistTopTenTask = new ArtistTopTenTask();
+            artistTopTenTask.execute(mArtistIDStr);
+        }
+
         return rootView;
     }
 
@@ -79,22 +88,24 @@ public class ArtistDetailActivityFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        if (listView != null) {
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Track track = tracksListAdapter.getItem(position);
-                TrackModel trackModel = new TrackModel(mArtistIDStr, mArtistNameSrt, track.album.name,
-                        track.album.images.get(0).url, track.id, track.name, track.preview_url);
-//                Intent intent = new Intent(getActivity(), TrackPlayerActivity.class);
-//                startActivity(intent);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("trackModel", trackModel);
-                TrackPlayerActivityFragment playerActivityFragment = new TrackPlayerActivityFragment();
-                playerActivityFragment.setArguments(bundle);
-                playerActivityFragment.show(getFragmentManager(), "dialog");
-            }
-        });
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    Track track = tracksListAdapter.getItem(position);
+                    if (track != null) {
+                        TrackModel trackModel = new TrackModel(mArtistIDStr, mArtistNameSrt, track.album.name,
+                                track.album.images.get(0).url, track.id, track.name, track.preview_url);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("trackModel", trackModel);
+                        TrackPlayerActivityFragment playerActivityFragment = new TrackPlayerActivityFragment();
+                        playerActivityFragment.setArguments(bundle);
+                        playerActivityFragment.show(getFragmentManager(), "dialog");
+                    }
+                }
+            });
+        }
     }
 
     @Override

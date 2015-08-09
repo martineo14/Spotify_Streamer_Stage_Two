@@ -16,7 +16,6 @@
 
 package ar.com.martineo14.spotifystreamer2.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -30,7 +29,6 @@ import android.widget.Toast;
 import java.util.List;
 
 import ar.com.martineo14.spotifystreamer2.R;
-import ar.com.martineo14.spotifystreamer2.ui.activity.ArtistDetailActivity;
 import ar.com.martineo14.spotifystreamer2.ui.adapter.ArtistListAdapter;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
@@ -53,6 +51,7 @@ public class SearchArtistFragment extends Fragment {
     private ArtistListAdapter artistAdapter;
     private ListView listView;
     private SearchView searchView;
+    private int mPosition = ListView.INVALID_POSITION;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,10 +96,14 @@ public class SearchArtistFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Artist artist = artistAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), ArtistDetailActivity.class);
-                intent.putExtra(ARTIST_ID, artist.id);
-                intent.putExtra(ARTIST_NAME, artist.name);
-                startActivity(intent);
+                ((SearchCallback) getActivity())
+                        .onItemSelected(artist);
+
+//                Intent intent = new Intent(getActivity(), ArtistDetailActivity.class);
+//                intent.putExtra(ARTIST_ID, artist.id);
+//                intent.putExtra(ARTIST_NAME, artist.name);
+//                startActivity(intent);
+                mPosition = position;
             }
         });
     }
@@ -141,5 +144,17 @@ public class SearchArtistFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(ARTIST_NAME, artistNameSearch);
         super.onSaveInstanceState(outState);
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface SearchCallback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        void onItemSelected(Artist artist);
     }
 }
