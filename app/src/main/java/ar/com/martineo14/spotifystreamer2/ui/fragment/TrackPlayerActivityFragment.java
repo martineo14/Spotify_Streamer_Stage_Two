@@ -30,11 +30,13 @@ public class TrackPlayerActivityFragment extends DialogFragment {
     TextView artistAlbumNameTextView;
     ImageView trackAlbumImage;
     TextView trackNameTextView;
-    ImageButton buttonPlay;
-    ImageButton buttonPause;
+    ImageButton buttonPlayPause;
     ImageButton buttonNext;
     ImageButton buttonPrevious;
     SeekBar seekBar;
+    Boolean IsPlaying = false;
+    MediaPlayer mediaPlayer;
+    Integer PlayerState = 0;
     public TrackPlayerActivityFragment() {
     }
 
@@ -55,34 +57,58 @@ public class TrackPlayerActivityFragment extends DialogFragment {
         Picasso.with(getActivity()).load(trackModel.albumImage)
                 .placeholder(R.drawable.placeholder_music).into(trackAlbumImage);
         addListenerOnButton(rootView);
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        String url = trackModel.trackPreview;
+        try {
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return rootView;
     }
 
 
     public void addListenerOnButton(View rootView) {
 
-        buttonPlay = (ImageButton) rootView.findViewById(R.id.player_media_play);
+        buttonPlayPause = (ImageButton) rootView.findViewById(R.id.player_media_play_pause);
 
-        buttonPlay.setOnClickListener(new View.OnClickListener() {
+        buttonPlayPause.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
 
-                String url = trackModel.trackPreview;
-                MediaPlayer mediaPlayer = new MediaPlayer();
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                try {
-                    mediaPlayer.setDataSource(url);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (PlayerState == 0 || PlayerState == 2) {
+                    //Play
+                    PlayerState = 1;
+                    buttonPlayPause.setImageResource(android.R.drawable.ic_media_pause);
+                    mediaPlayer.start();
+                } else if (PlayerState == 1) {
+                    //Pause
+                    PlayerState = 2;
+                    buttonPlayPause.setImageResource(android.R.drawable.ic_media_play);
+                    mediaPlayer.pause();
                 }
-                try {
-                    mediaPlayer.prepare(); // might take long! (for buffering, etc)
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                mediaPlayer.start();
                 seekBar.setMax(mediaPlayer.getDuration());
+            }
+
+        });
+
+        buttonNext.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+            }
+
+        });
+
+        buttonPrevious.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
             }
 
         });
