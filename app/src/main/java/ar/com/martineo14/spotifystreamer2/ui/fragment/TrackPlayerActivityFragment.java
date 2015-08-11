@@ -37,6 +37,7 @@ public class TrackPlayerActivityFragment extends DialogFragment {
     Boolean IsPlaying = false;
     MediaPlayer mediaPlayer;
     Integer PlayerState = 0;
+
     public TrackPlayerActivityFragment() {
     }
 
@@ -79,22 +80,20 @@ public class TrackPlayerActivityFragment extends DialogFragment {
             @Override
             public void onClick(View arg0) {
 
-                if (PlayerState == 0 || PlayerState == 2) {
+                if (!mediaPlayer.isPlaying()) {
                     //Play
-                    PlayerState = 1;
                     buttonPlayPause.setImageResource(android.R.drawable.ic_media_pause);
                     mediaPlayer.start();
-                } else if (PlayerState == 1) {
+                } else {
                     //Pause
-                    PlayerState = 2;
                     buttonPlayPause.setImageResource(android.R.drawable.ic_media_play);
                     mediaPlayer.pause();
                 }
                 seekBar.setMax(mediaPlayer.getDuration());
             }
-
         });
 
+        buttonNext = (ImageButton) rootView.findViewById(R.id.player_media_next);
         buttonNext.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -104,6 +103,7 @@ public class TrackPlayerActivityFragment extends DialogFragment {
 
         });
 
+        buttonPrevious = (ImageButton) rootView.findViewById(R.id.player_media_previous);
         buttonPrevious.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -113,5 +113,12 @@ public class TrackPlayerActivityFragment extends DialogFragment {
 
         });
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mediaPlayer.release();
+        mediaPlayer = null;
     }
 }

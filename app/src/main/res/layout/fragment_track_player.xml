@@ -29,7 +29,7 @@
         android:layout_height="match_parent"
         android:layout_weight="5"
         android:scaleType="centerCrop"
-        android:src="@drawable/placeholder_music" />
+        tools:src="@drawable/placeholder_music" />
 
     <TextView
         android:id="@+id/player_track_name"
@@ -79,18 +79,11 @@
             android:src="@android:drawable/ic_media_previous" />
 
         <ImageButton
-            android:id="@+id/player_media_play"
+            android:id="@+id/player_media_play_pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@android:drawable/ic_media_play" />
-
-        <ImageButton
-            android:id="@+id/player_media_pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@android:drawable/ic_media_pause" />
 
         <ImageButton
             android:id="@+id/player_media_next"
