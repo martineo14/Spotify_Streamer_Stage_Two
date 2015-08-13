@@ -18,6 +18,7 @@ import java.io.IOException;
 
 import ar.com.martineo14.spotifystreamer2.R;
 import ar.com.martineo14.spotifystreamer2.data.model.TrackModel;
+import kaaes.spotify.webapi.android.models.Track;
 
 
 /**
@@ -35,8 +36,9 @@ public class TrackPlayerActivityFragment extends DialogFragment {
     ImageButton buttonPrevious;
     SeekBar seekBar;
     Boolean IsPlaying = false;
-    MediaPlayer mediaPlayer;
-    Integer PlayerState = 0;
+    MediaPlayer mediaPlayer = new MediaPlayer();
+    Integer mActualPosition;
+
 
     public TrackPlayerActivityFragment() {
     }
@@ -45,20 +47,27 @@ public class TrackPlayerActivityFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_track_player, container, false);
-        Bundle bundle = getArguments();
-        trackModel = bundle.getParcelable("trackModel");
+
         artistNameTextView = (TextView) rootView.findViewById(R.id.player_artist_name);
         artistAlbumNameTextView = (TextView) rootView.findViewById(R.id.player_album_name);
         trackAlbumImage = (ImageView) rootView.findViewById(R.id.player_album_artwork);
         trackNameTextView = (TextView) rootView.findViewById(R.id.player_track_name);
         seekBar = (SeekBar) rootView.findViewById(R.id.player_seekbar);
+        addListenerOnButton(rootView);
+        Bundle bundle = getArguments();
+        trackModel = bundle.getParcelable("trackModel");
+        displayTrack(trackModel);
+        return rootView;
+    }
+
+    public void displayTrack(TrackModel trackModel) {
+        buttonPlayPause.setImageResource(android.R.drawable.ic_media_play);
+        mActualPosition = trackModel.trackPosition;
         artistNameTextView.setText(trackModel.artistName);
         artistAlbumNameTextView.setText(trackModel.artistAlbum);
         trackNameTextView.setText(trackModel.trackName);
         Picasso.with(getActivity()).load(trackModel.albumImage)
                 .placeholder(R.drawable.placeholder_music).into(trackAlbumImage);
-        addListenerOnButton(rootView);
-        mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         String url = trackModel.trackPreview;
         try {
@@ -67,9 +76,7 @@ public class TrackPlayerActivityFragment extends DialogFragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return rootView;
     }
-
 
     public void addListenerOnButton(View rootView) {
 
@@ -98,7 +105,12 @@ public class TrackPlayerActivityFragment extends DialogFragment {
 
             @Override
             public void onClick(View arg0) {
-
+                mediaPlayer.reset();
+                if (mActualPosition < ArtistDetailActivityFragment.tracksResult.size() - 1) {
+                    displayTrack(getTrackModel(mActualPosition + 1));
+                } else {
+                    displayTrack(getTrackModel(0));
+                }
             }
 
         });
@@ -108,11 +120,28 @@ public class TrackPlayerActivityFragment extends DialogFragment {
 
             @Override
             public void onClick(View arg0) {
+                mediaPlayer.reset();
+                if (mActualPosition == 0) {
+                    displayTrack(getTrackModel(ArtistDetailActivityFragment.tracksResult.size() - 1));
+                } else {
+                    displayTrack(getTrackModel(mActualPosition - 1));
+                }
 
             }
 
         });
 
+    }
+
+    public TrackModel getTrackModel(Integer position) {
+        TrackModel trackModel = null;
+        Track track = ArtistDetailActivityFragment.tracksResult.get(position);
+        if (track != null) {
+            trackModel = new TrackModel(ArtistDetailActivityFragment.mArtistIDStr,
+                    ArtistDetailActivityFragment.mArtistNameSrt, track.album.name,
+                    track.album.images.get(0).url, track.id, track.name, track.preview_url, position);
+        }
+        return trackModel;
     }
 
     @Override

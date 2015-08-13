@@ -48,11 +48,11 @@ public class ArtistDetailActivityFragment extends Fragment {
     public static final String ARTIST_ID = "artist_id";
     public static final String ARTIST_NAME = "artist_name";
     private static final String LOG_TAG = ArtistDetailActivityFragment.class.getSimpleName();
-    List<Track> tracksResult;
+    public static List<Track> tracksResult;
+    public static String mArtistIDStr;
+    public static String mArtistNameSrt;
     private ArtistTracksListAdapter tracksListAdapter;
     private ListView listView;
-    private String mArtistIDStr;
-    private String mArtistNameSrt;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public class ArtistDetailActivityFragment extends Fragment {
                     Track track = tracksListAdapter.getItem(position);
                     if (track != null) {
                         TrackModel trackModel = new TrackModel(mArtistIDStr, mArtistNameSrt, track.album.name,
-                                track.album.images.get(0).url, track.id, track.name, track.preview_url);
+                                track.album.images.get(0).url, track.id, track.name, track.preview_url, position);
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("trackModel", trackModel);
                         TrackPlayerActivityFragment playerActivityFragment = new TrackPlayerActivityFragment();

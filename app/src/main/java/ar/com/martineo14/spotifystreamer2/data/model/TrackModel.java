@@ -26,9 +26,10 @@ public class TrackModel implements Parcelable {
     public String trackId;
     public String trackName;
     public String trackPreview;
+    public Integer trackPosition;
 
     public TrackModel(String artistId, String artistName, String artistAlbum, String albumImage,
-                      String trackId, String trackName, String trackPreview) {
+                      String trackId, String trackName, String trackPreview, Integer trackPosition) {
         this.artistId = artistId;
         this.artistName = artistName;
         this.artistAlbum = artistAlbum;
@@ -36,6 +37,8 @@ public class TrackModel implements Parcelable {
         this.trackId = trackId;
         this.trackName = trackName;
         this.trackPreview = trackPreview;
+        this.trackPosition = trackPosition;
+
     }
 
     private TrackModel(Parcel in) {
@@ -46,6 +49,7 @@ public class TrackModel implements Parcelable {
         trackId = in.readString();
         trackName = in.readString();
         trackPreview = in.readString();
+        trackPosition = in.readInt();
     }
 
     @Override
@@ -66,5 +70,6 @@ public class TrackModel implements Parcelable {
         parcel.writeString(trackId);
         parcel.writeString(trackName);
         parcel.writeString(trackPreview);
+        parcel.writeInt(trackPosition);
     }
 }
