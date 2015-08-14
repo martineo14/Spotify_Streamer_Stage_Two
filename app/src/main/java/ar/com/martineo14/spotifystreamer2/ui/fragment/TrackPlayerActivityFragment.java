@@ -3,6 +3,7 @@ package ar.com.martineo14.spotifystreamer2.ui.fragment;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ import ar.com.martineo14.spotifystreamer2.R;
 import ar.com.martineo14.spotifystreamer2.data.model.TrackModel;
 import kaaes.spotify.webapi.android.models.Track;
 
+import static ar.com.martineo14.spotifystreamer2.util.Utils.convertMillisToMinutes;
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -35,12 +38,29 @@ public class TrackPlayerActivityFragment extends DialogFragment {
     ImageButton buttonNext;
     ImageButton buttonPrevious;
     SeekBar seekBar;
-    Boolean IsPlaying = false;
+    TextView trackDuration;
     MediaPlayer mediaPlayer = new MediaPlayer();
     Integer mActualPosition;
-
+    private Handler mHandler = new Handler();
+    private Runnable updateSeekbar = new Runnable() {
+        @Override
+        public void run() {
+            if (mediaPlayer != null) {
+                int mCurrentPosition = mediaPlayer.getCurrentPosition();
+                seekBar.setProgress(mCurrentPosition / 1000);
+                trackDuration.setText(convertMillisToMinutes(mCurrentPosition));
+            }
+            mHandler.postDelayed(this, 1000);
+        }
+    };
 
     public TrackPlayerActivityFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
@@ -53,9 +73,15 @@ public class TrackPlayerActivityFragment extends DialogFragment {
         trackAlbumImage = (ImageView) rootView.findViewById(R.id.player_album_artwork);
         trackNameTextView = (TextView) rootView.findViewById(R.id.player_track_name);
         seekBar = (SeekBar) rootView.findViewById(R.id.player_seekbar);
+        trackDuration = (TextView) rootView.findViewById(R.id.player_track_duration);
         addListenerOnButton(rootView);
         Bundle bundle = getArguments();
-        trackModel = bundle.getParcelable("trackModel");
+        if (savedInstanceState == null) {
+            trackModel = bundle.getParcelable("trackModel");
+        } else {
+            trackModel = savedInstanceState.getParcelable("trackModel");
+        }
+
         displayTrack(trackModel);
         return rootView;
     }
@@ -72,7 +98,13 @@ public class TrackPlayerActivityFragment extends DialogFragment {
         String url = trackModel.trackPreview;
         try {
             mediaPlayer.setDataSource(url);
-            mediaPlayer.prepare();
+            mediaPlayer.prepareAsync();
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    playerPlayPause();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -81,22 +113,14 @@ public class TrackPlayerActivityFragment extends DialogFragment {
     public void addListenerOnButton(View rootView) {
 
         buttonPlayPause = (ImageButton) rootView.findViewById(R.id.player_media_play_pause);
+        buttonPlayPause.setEnabled(false);
 
         buttonPlayPause.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
 
-                if (!mediaPlayer.isPlaying()) {
-                    //Play
-                    buttonPlayPause.setImageResource(android.R.drawable.ic_media_pause);
-                    mediaPlayer.start();
-                } else {
-                    //Pause
-                    buttonPlayPause.setImageResource(android.R.drawable.ic_media_play);
-                    mediaPlayer.pause();
-                }
-                seekBar.setMax(mediaPlayer.getDuration());
+                playerPlayPause();
             }
         });
 
@@ -133,6 +157,21 @@ public class TrackPlayerActivityFragment extends DialogFragment {
 
     }
 
+    private void playerPlayPause() {
+        if (!mediaPlayer.isPlaying()) {
+            //Play
+            buttonPlayPause.setImageResource(android.R.drawable.ic_media_pause);
+            buttonPlayPause.setEnabled(true);
+            mediaPlayer.start();
+            //seekBar.setMax(mediaPlayer.getDuration());
+            mHandler.postDelayed(updateSeekbar, 1000);
+        } else {
+            //Pause
+            buttonPlayPause.setImageResource(android.R.drawable.ic_media_play);
+            mediaPlayer.pause();
+        }
+    }
+
     public TrackModel getTrackModel(Integer position) {
         TrackModel trackModel = null;
         Track track = ArtistDetailActivityFragment.tracksResult.get(position);
@@ -144,10 +183,19 @@ public class TrackPlayerActivityFragment extends DialogFragment {
         return trackModel;
     }
 
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable("trackModel", trackModel);
+        super.onSaveInstanceState(outState);
+    }
+
     @Override
     public void onStop() {
         super.onStop();
-        mediaPlayer.release();
-        mediaPlayer = null;
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 }
