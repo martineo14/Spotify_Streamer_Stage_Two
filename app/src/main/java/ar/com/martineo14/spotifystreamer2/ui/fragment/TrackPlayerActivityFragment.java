@@ -39,8 +39,10 @@ public class TrackPlayerActivityFragment extends DialogFragment {
     ImageButton buttonPrevious;
     SeekBar seekBar;
     TextView trackDuration;
-    MediaPlayer mediaPlayer = new MediaPlayer();
+    MediaPlayer mediaPlayer;
     Integer mActualPosition;
+
+    //http://stackoverflow.com/questions/21620348/how-to-create-media-player-in-android-with-seek-bar-and-button
     private Handler mHandler = new Handler();
     private Runnable updateSeekbar = new Runnable() {
         @Override
@@ -76,6 +78,7 @@ public class TrackPlayerActivityFragment extends DialogFragment {
         trackDuration = (TextView) rootView.findViewById(R.id.player_track_duration);
         addListenerOnButton(rootView);
         Bundle bundle = getArguments();
+        createMediaPlayer();
         if (savedInstanceState == null) {
             trackModel = bundle.getParcelable("trackModel");
         } else {
@@ -86,6 +89,11 @@ public class TrackPlayerActivityFragment extends DialogFragment {
         return rootView;
     }
 
+    public void createMediaPlayer() {
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+    }
+
     public void displayTrack(TrackModel trackModel) {
         buttonPlayPause.setImageResource(android.R.drawable.ic_media_play);
         mActualPosition = trackModel.trackPosition;
@@ -94,7 +102,6 @@ public class TrackPlayerActivityFragment extends DialogFragment {
         trackNameTextView.setText(trackModel.trackName);
         Picasso.with(getActivity()).load(trackModel.albumImage)
                 .placeholder(R.drawable.placeholder_music).into(trackAlbumImage);
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         String url = trackModel.trackPreview;
         try {
             mediaPlayer.setDataSource(url);
@@ -119,7 +126,6 @@ public class TrackPlayerActivityFragment extends DialogFragment {
 
             @Override
             public void onClick(View arg0) {
-
                 playerPlayPause();
             }
         });
@@ -158,6 +164,11 @@ public class TrackPlayerActivityFragment extends DialogFragment {
     }
 
     private void playerPlayPause() {
+
+        if (mediaPlayer == null) {
+            createMediaPlayer();
+            displayTrack(trackModel);
+        }
         if (!mediaPlayer.isPlaying()) {
             //Play
             buttonPlayPause.setImageResource(android.R.drawable.ic_media_pause);
