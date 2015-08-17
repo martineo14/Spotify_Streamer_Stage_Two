@@ -30,6 +30,7 @@ import java.util.List;
 
 import ar.com.martineo14.spotifystreamer2.R;
 import ar.com.martineo14.spotifystreamer2.ui.adapter.ArtistListAdapter;
+import ar.com.martineo14.spotifystreamer2.util.Constants;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Artist;
@@ -44,8 +45,6 @@ import retrofit.client.Response;
  */
 public class SearchArtistFragment extends Fragment {
 
-    public static final String ARTIST_NAME = "artist_name";
-    public static final String ARTIST_ID = "artist_id";
     List<Artist> artistResult;
     private String artistNameSearch;
     private ArtistListAdapter artistAdapter;
@@ -72,7 +71,7 @@ public class SearchArtistFragment extends Fragment {
         searchView = (SearchView) view.findViewById(R.id.search_artist);
 
         if (savedInstanceState != null) {
-            artistNameSearch = savedInstanceState.getString(ARTIST_NAME);
+            artistNameSearch = savedInstanceState.getString(Constants.ARTIST_NAME);
             searchView.setQuery(artistNameSearch, false);
             updateArtistList();
         }
@@ -98,11 +97,6 @@ public class SearchArtistFragment extends Fragment {
                 Artist artist = artistAdapter.getItem(position);
                 ((SearchCallback) getActivity())
                         .onItemSelected(artist);
-
-//                Intent intent = new Intent(getActivity(), ArtistDetailActivity.class);
-//                intent.putExtra(ARTIST_ID, artist.id);
-//                intent.putExtra(ARTIST_NAME, artist.name);
-//                startActivity(intent);
                 mPosition = position;
             }
         });
@@ -142,7 +136,7 @@ public class SearchArtistFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString(ARTIST_NAME, artistNameSearch);
+        outState.putString(Constants.ARTIST_NAME, artistNameSearch);
         super.onSaveInstanceState(outState);
     }
 

@@ -34,6 +34,7 @@ import java.util.Map;
 import ar.com.martineo14.spotifystreamer2.R;
 import ar.com.martineo14.spotifystreamer2.data.model.TrackModel;
 import ar.com.martineo14.spotifystreamer2.ui.adapter.ArtistTracksListAdapter;
+import ar.com.martineo14.spotifystreamer2.util.Constants;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Track;
@@ -45,8 +46,6 @@ import kaaes.spotify.webapi.android.models.Tracks;
  */
 public class ArtistDetailActivityFragment extends Fragment {
 
-    public static final String ARTIST_ID = "artist_id";
-    public static final String ARTIST_NAME = "artist_name";
     private static final String LOG_TAG = ArtistDetailActivityFragment.class.getSimpleName();
     public static List<Track> tracksResult;
     public static String mArtistIDStr;
@@ -65,17 +64,17 @@ public class ArtistDetailActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_artist_detail, container, false);
         Intent intent = getActivity().getIntent();
-        if (intent != null && intent.hasExtra(ARTIST_ID)) {
-            mArtistIDStr = intent.getStringExtra(ARTIST_ID);
-            mArtistNameSrt = intent.getStringExtra(ARTIST_NAME);
+        if (intent != null && intent.hasExtra(Constants.ARTIST_NAME)) {
+            mArtistIDStr = intent.getStringExtra(Constants.ARTIST_ID);
+            mArtistNameSrt = intent.getStringExtra(Constants.ARTIST_NAME);
             listView = (ListView) rootView.findViewById(R.id.list_artist_top_ten);
             ArtistTopTenTask artistTopTenTask = new ArtistTopTenTask();
             artistTopTenTask.execute(mArtistIDStr);
         }
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mArtistIDStr = bundle.getString(ARTIST_ID);
-            mArtistNameSrt = bundle.getString(ARTIST_NAME);
+            mArtistIDStr = bundle.getString(Constants.ARTIST_ID);
+            mArtistNameSrt = bundle.getString(Constants.ARTIST_NAME);
             listView = (ListView) rootView.findViewById(R.id.list_artist_top_ten);
             ArtistTopTenTask artistTopTenTask = new ArtistTopTenTask();
             artistTopTenTask.execute(mArtistIDStr);
@@ -98,7 +97,7 @@ public class ArtistDetailActivityFragment extends Fragment {
                         TrackModel trackModel = new TrackModel(mArtistIDStr, mArtistNameSrt, track.album.name,
                                 track.album.images.get(0).url, track.id, track.name, track.preview_url, position);
                         Bundle bundle = new Bundle();
-                        bundle.putParcelable("trackModel", trackModel);
+                        bundle.putParcelable(Constants.TRACK_MODEL, trackModel);
                         TrackPlayerActivityFragment playerActivityFragment = new TrackPlayerActivityFragment();
                         playerActivityFragment.setArguments(bundle);
                         playerActivityFragment.show(getFragmentManager(), "dialog");

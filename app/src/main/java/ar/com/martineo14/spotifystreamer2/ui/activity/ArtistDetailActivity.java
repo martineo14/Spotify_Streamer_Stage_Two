@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ar.com.martineo14.spotifystreamer2.R;
+import ar.com.martineo14.spotifystreamer2.util.Constants;
 
 
 public class ArtistDetailActivity extends ActionBarActivity {
@@ -35,8 +36,8 @@ public class ArtistDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_detail);
         Intent _getIntent = getIntent();
-        if (_getIntent.getStringExtra("artist_name") != null) {
-            artist_name = _getIntent.getStringExtra("artist_name");
+        if (_getIntent.getStringExtra(Constants.ARTIST_NAME) != null) {
+            artist_name = _getIntent.getStringExtra(Constants.ARTIST_NAME);
             ActionBar actionBar = getSupportActionBar();
             actionBar.setSubtitle(artist_name);
         }
