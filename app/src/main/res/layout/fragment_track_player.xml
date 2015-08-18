@@ -14,14 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Coldplay" />
+        tools:text="Coldplay" />
 
     <TextView
         android:id="@+id/player_album_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Ghost Stories" />
+        tools:text="Ghost Stories" />
 
     <ImageView
         android:id="@+id/player_album_artwork"
@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="A Sky Full of Stars" />
+        tools:text="A Sky Full of Stars" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
