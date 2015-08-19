@@ -55,15 +55,15 @@ public class ArtistListAdapter extends ArrayAdapter<Artist> {
         ImageView artist_image = (ImageView) rootView.findViewById(R.id.img_artist_line_item);
         //artist_image.setImageURI(artistModel.artistImage);
         List<Image> images = artistModel.images;
-        if (images != null && images.size() > 0) {
-            if (images.size() >= 2) {
-                Picasso.with(context).load(artistModel.images.get(2).url).into(artist_image);
-            } else {
-                Picasso.with(context).load(artistModel.images.get(0).url).into(artist_image);
-            }
-        } else {
+        if (images == null || images.size() <= 0) {
             //http://www.the-music-shop.com/wp-content/uploads/2015/02/placeholder.png
             Picasso.with(context).load(R.drawable.placeholder_music).into(artist_image);
+        } else {
+            if (images.size() < 3) {
+                Picasso.with(context).load(artistModel.images.get(0).url).into(artist_image);
+            } else {
+                Picasso.with(context).load(artistModel.images.get(2).url).into(artist_image);
+            }
         }
         //Picasso.with(context).load(image.url).into(artist_image);
 

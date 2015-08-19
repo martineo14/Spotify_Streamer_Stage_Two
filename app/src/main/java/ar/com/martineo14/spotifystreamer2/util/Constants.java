@@ -22,6 +22,8 @@ package ar.com.martineo14.spotifystreamer2.util;
 public class Constants {
     public static final String ARTIST_ID = "artist_id";
     public static final String ARTIST_NAME = "artist_name";
-    public static final String TRACK_MODEL = "trackModel";
-    public static final String ACTUAL_POSITION = "ActualPosition";
+    public static final String TRACK_MODEL = "track_model";
+    public static final String ACTUAL_POSITION = "actual_position";
+    public static final String TRACK_SELECTED = "track_selected";
+    public static final String TRACK_MODEL_RESULT = "track_model_result";
 }

@@ -16,7 +16,11 @@
 
 package ar.com.martineo14.spotifystreamer2.util;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import kaaes.spotify.webapi.android.models.Image;
+import kaaes.spotify.webapi.android.models.Track;
 
 /**
  * Created by sergiomartinpueyo on 8/13/15.
@@ -29,5 +33,27 @@ public class Utils {
         return String.format("%02d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
                 TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+    }
+
+
+    public static String getSmallImageFromTrack(Track track) {
+        List<Image> images = track.album.images;
+        if (images == null || images.size() <= 0) {
+            return null;
+        }
+        if (images.size() == 2) {
+            return track.album.images.get(2).url;
+        } else {
+            return track.album.images.get(1).url;
+        }
+    }
+
+    public static String getBigImageFromTrack(Track track) {
+        List<Image> images = track.album.images;
+        if (images == null || images.size() <= 0) {
+            return null;
+        }
+        return track.album.images.get(0).url;
+
     }
 }

@@ -39,6 +39,8 @@ import ar.com.martineo14.spotifystreamer2.util.Constants;
 import kaaes.spotify.webapi.android.models.Track;
 
 import static ar.com.martineo14.spotifystreamer2.util.Utils.convertMillisToMinutes;
+import static ar.com.martineo14.spotifystreamer2.util.Utils.getBigImageFromTrack;
+import static ar.com.martineo14.spotifystreamer2.util.Utils.getSmallImageFromTrack;
 
 
 /**
@@ -124,7 +126,8 @@ public class TrackPlayerActivityFragment extends DialogFragment {
             public void onClick(View arg0) {
                 mediaPlayer.reset();
                 if (mActualPosition < ArtistDetailActivityFragment.tracksResult.size() - 1) {
-                    displayTrack(getTrackModel(mActualPosition + 1));
+                    int nextPosition = mActualPosition + 1;
+                    displayTrack(getTrackModel(nextPosition));
                 } else {
                     displayTrack(getTrackModel(0));
                 }
@@ -140,7 +143,8 @@ public class TrackPlayerActivityFragment extends DialogFragment {
                 if (mActualPosition == 0) {
                     displayTrack(getTrackModel(ArtistDetailActivityFragment.tracksResult.size() - 1));
                 } else {
-                    displayTrack(getTrackModel(mActualPosition - 1));
+                    int prevPosition = mActualPosition - 1;
+                    displayTrack(getTrackModel(prevPosition));
                 }
             }
         });
@@ -193,7 +197,8 @@ public class TrackPlayerActivityFragment extends DialogFragment {
         if (track != null) {
             trackModel = new TrackModel(ArtistDetailActivityFragment.mArtistIDStr,
                     ArtistDetailActivityFragment.mArtistNameSrt, track.album.name,
-                    track.album.images.get(0).url, track.id, track.name, track.preview_url, position);
+                    getBigImageFromTrack(track), getSmallImageFromTrack(track), track.id,
+                    track.name, track.preview_url, position);
         }
         return trackModel;
     }
@@ -210,7 +215,7 @@ public class TrackPlayerActivityFragment extends DialogFragment {
         artistNameTextView.setText(trackModel.artistName);
         artistAlbumNameTextView.setText(trackModel.artistAlbum);
         trackNameTextView.setText(trackModel.trackName);
-        Picasso.with(getActivity()).load(trackModel.albumImage)
+        Picasso.with(getActivity()).load(trackModel.albumImageBig)
                 .placeholder(R.drawable.placeholder_music).into(trackAlbumImage);
         String url = trackModel.trackPreview;
         try {

@@ -38,18 +38,21 @@ public class TrackModel implements Parcelable {
     public String artistId;
     public String artistName;
     public String artistAlbum;
-    public String albumImage;
+    public String albumImageBig;
+    public String albumImageSmall;
     public String trackId;
     public String trackName;
     public String trackPreview;
     public Integer trackPosition;
 
-    public TrackModel(String artistId, String artistName, String artistAlbum, String albumImage,
-                      String trackId, String trackName, String trackPreview, Integer trackPosition) {
+    public TrackModel(String artistId, String artistName, String artistAlbum, String albumImageBig,
+                      String albumImageSmall, String trackId, String trackName, String trackPreview,
+                      Integer trackPosition) {
         this.artistId = artistId;
         this.artistName = artistName;
         this.artistAlbum = artistAlbum;
-        this.albumImage = albumImage;
+        this.albumImageBig = albumImageBig;
+        this.albumImageSmall = albumImageSmall;
         this.trackId = trackId;
         this.trackName = trackName;
         this.trackPreview = trackPreview;
@@ -61,7 +64,8 @@ public class TrackModel implements Parcelable {
         artistId = in.readString();
         artistName = in.readString();
         artistAlbum = in.readString();
-        albumImage = in.readString();
+        albumImageBig = in.readString();
+        albumImageSmall = in.readString();
         trackId = in.readString();
         trackName = in.readString();
         trackPreview = in.readString();
@@ -82,7 +86,8 @@ public class TrackModel implements Parcelable {
         parcel.writeString(artistId);
         parcel.writeString(artistName);
         parcel.writeString(artistAlbum);
-        parcel.writeString(albumImage);
+        parcel.writeString(albumImageBig);
+        parcel.writeString(albumImageSmall);
         parcel.writeString(trackId);
         parcel.writeString(trackName);
         parcel.writeString(trackPreview);

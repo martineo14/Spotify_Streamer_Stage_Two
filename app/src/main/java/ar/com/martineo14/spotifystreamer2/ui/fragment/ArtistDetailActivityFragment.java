@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,9 @@ import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Track;
 import kaaes.spotify.webapi.android.models.Tracks;
 
+import static ar.com.martineo14.spotifystreamer2.util.Utils.getBigImageFromTrack;
+import static ar.com.martineo14.spotifystreamer2.util.Utils.getSmallImageFromTrack;
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -50,36 +54,42 @@ public class ArtistDetailActivityFragment extends Fragment {
     public static List<Track> tracksResult;
     public static String mArtistIDStr;
     public static String mArtistNameSrt;
+    public ArrayList<TrackModel> tracksModelResult;
     private ArtistTracksListAdapter tracksListAdapter;
     private ListView listView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_artist_detail, container, false);
-        Intent intent = getActivity().getIntent();
-        if (intent != null && intent.hasExtra(Constants.ARTIST_NAME)) {
-            mArtistIDStr = intent.getStringExtra(Constants.ARTIST_ID);
-            mArtistNameSrt = intent.getStringExtra(Constants.ARTIST_NAME);
-            listView = (ListView) rootView.findViewById(R.id.list_artist_top_ten);
-            ArtistTopTenTask artistTopTenTask = new ArtistTopTenTask();
-            artistTopTenTask.execute(mArtistIDStr);
+        listView = (ListView) rootView.findViewById(R.id.list_artist_top_ten);
+        if (savedInstanceState != null) {
+            tracksModelResult = savedInstanceState.getParcelableArrayList(Constants.TRACK_MODEL_RESULT);
+            if (tracksModelResult != null) {
+                tracksListAdapter = new ArtistTracksListAdapter(getActivity(), tracksModelResult);
+                listView.setAdapter(tracksListAdapter);
+            }
+        } else {
+            Intent intent = getActivity().getIntent();
+            if (intent != null && intent.hasExtra(Constants.ARTIST_NAME)) {
+                mArtistIDStr = intent.getStringExtra(Constants.ARTIST_ID);
+                mArtistNameSrt = intent.getStringExtra(Constants.ARTIST_NAME);
+                ArtistTopTenTask artistTopTenTask = new ArtistTopTenTask();
+                artistTopTenTask.execute(mArtistIDStr);
+            }
+            Bundle bundle = getArguments();
+            if (bundle != null) {
+                mArtistIDStr = bundle.getString(Constants.ARTIST_ID);
+                mArtistNameSrt = bundle.getString(Constants.ARTIST_NAME);
+                ArtistTopTenTask artistTopTenTask = new ArtistTopTenTask();
+                artistTopTenTask.execute(mArtistIDStr);
+            }
         }
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            mArtistIDStr = bundle.getString(Constants.ARTIST_ID);
-            mArtistNameSrt = bundle.getString(Constants.ARTIST_NAME);
-            listView = (ListView) rootView.findViewById(R.id.list_artist_top_ten);
-            ArtistTopTenTask artistTopTenTask = new ArtistTopTenTask();
-            artistTopTenTask.execute(mArtistIDStr);
-        }
-
         return rootView;
     }
 
@@ -92,10 +102,11 @@ public class ArtistDetailActivityFragment extends Fragment {
 
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    Track track = tracksListAdapter.getItem(position);
+                    TrackModel track = tracksListAdapter.getItem(position);
                     if (track != null) {
-                        TrackModel trackModel = new TrackModel(mArtistIDStr, mArtistNameSrt, track.album.name,
-                                track.album.images.get(0).url, track.id, track.name, track.preview_url, position);
+                        TrackModel trackModel = new TrackModel(mArtistIDStr, mArtistNameSrt,
+                                track.artistAlbum, track.albumImageBig, track.albumImageSmall,
+                                track.trackId, track.trackName, track.trackPreview, position);
                         Bundle bundle = new Bundle();
                         bundle.putParcelable(Constants.TRACK_MODEL, trackModel);
                         TrackPlayerActivityFragment playerActivityFragment = new TrackPlayerActivityFragment();
@@ -109,6 +120,7 @@ public class ArtistDetailActivityFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(Constants.TRACK_MODEL_RESULT, tracksModelResult);
         super.onSaveInstanceState(outState);
     }
 
@@ -144,7 +156,15 @@ public class ArtistDetailActivityFragment extends Fragment {
             } else {
                 if (result.tracks != null) {
                     tracksResult = result.tracks;
-                    tracksListAdapter = new ArtistTracksListAdapter(getActivity(), tracksResult);
+                    tracksModelResult = new ArrayList<TrackModel>();
+                    for (int i = 0; i < result.tracks.size(); i++) {
+                        Track track = result.tracks.get(i);
+                        TrackModel trackModel = new TrackModel(mArtistIDStr, mArtistNameSrt,
+                                track.album.name, getBigImageFromTrack(track), getSmallImageFromTrack(track),
+                                track.id, track.name, track.preview_url, i);
+                        tracksModelResult.add(trackModel);
+                    }
+                    tracksListAdapter = new ArtistTracksListAdapter(getActivity(), tracksModelResult);
                     listView.setAdapter(tracksListAdapter);
                 }
             }

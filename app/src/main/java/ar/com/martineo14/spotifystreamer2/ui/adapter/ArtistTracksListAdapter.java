@@ -30,41 +30,33 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import ar.com.martineo14.spotifystreamer2.R;
-import kaaes.spotify.webapi.android.models.Image;
-import kaaes.spotify.webapi.android.models.Track;
+import ar.com.martineo14.spotifystreamer2.data.model.TrackModel;
 
 /**
  * Created by sergiomartinpueyo on 7/4/15.
  */
-public class ArtistTracksListAdapter extends ArrayAdapter<Track> {
+public class ArtistTracksListAdapter extends ArrayAdapter<TrackModel> {
 
     private Context context;
 
-    public ArtistTracksListAdapter(Activity context, List<Track> trackModels) {
+    public ArtistTracksListAdapter(Activity context, List<TrackModel> trackModels) {
         super(context, 0, trackModels);
         this.context = context;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Track trackModel = getItem(position);
+        TrackModel trackModel = getItem(position);
         View rootView = LayoutInflater.from(getContext()).inflate(R.layout.artist_top_ten_item, parent, false);
 
         ImageView artist_image = (ImageView) rootView.findViewById(R.id.img_artist_top_ten_item);
-        List<Image> images = trackModel.album.images;
-        if (images != null && images.size() > 0) {
-            Picasso.with(context).load(trackModel.album.images.get(2).url).into(artist_image);
-        } else {
-            // I used an default image as placeholder
-            // /http://www.the-music-shop.com/wp-content/uploads/2015/02/placeholder.png
-            Picasso.with(context).load(R.drawable.placeholder_music).into(artist_image);
-        }
+        Picasso.with(context).load(trackModel.albumImageBig).into(artist_image);
 
         TextView artist_album_name = (TextView) rootView.findViewById(R.id.album_name_artist_top_ten_item);
-        artist_album_name.setText(trackModel.album.name);
+        artist_album_name.setText(trackModel.artistAlbum);
 
         TextView artist_track_name = (TextView) rootView.findViewById(R.id.track_name_artist_top_ten_item);
-        artist_track_name.setText(trackModel.name);
+        artist_track_name.setText(trackModel.artistName);
 
         return rootView;
     }
