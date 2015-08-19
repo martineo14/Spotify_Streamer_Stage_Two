@@ -49,11 +49,9 @@ public class ArtistListAdapter extends ArrayAdapter<Artist> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Artist artistModel = getItem(position);
-        Image image = new Image();
         View rootView = LayoutInflater.from(getContext()).inflate(R.layout.artist_line_item, parent, false);
 
         ImageView artist_image = (ImageView) rootView.findViewById(R.id.img_artist_line_item);
-        //artist_image.setImageURI(artistModel.artistImage);
         List<Image> images = artistModel.images;
         if (images == null || images.size() <= 0) {
             //http://www.the-music-shop.com/wp-content/uploads/2015/02/placeholder.png
@@ -65,8 +63,6 @@ public class ArtistListAdapter extends ArrayAdapter<Artist> {
                 Picasso.with(context).load(artistModel.images.get(2).url).into(artist_image);
             }
         }
-        //Picasso.with(context).load(image.url).into(artist_image);
-
         TextView artist_name = (TextView) rootView.findViewById(R.id.name_artist_line_item);
         artist_name.setText(artistModel.name);
 

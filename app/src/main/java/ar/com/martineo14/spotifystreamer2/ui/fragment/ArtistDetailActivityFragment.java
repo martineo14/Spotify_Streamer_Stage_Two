@@ -147,7 +147,10 @@ public class ArtistDetailActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Tracks result) {
-            if (result.tracks.size() == 0) {
+            if (result == null) {
+                Toast.makeText(getActivity(), getString(R.string.msg_error_default),
+                        Toast.LENGTH_LONG).show();
+            } else if (result.tracks.size() == 0) {
                 if (tracksListAdapter != null) {
                     tracksListAdapter.clear();
                 }
