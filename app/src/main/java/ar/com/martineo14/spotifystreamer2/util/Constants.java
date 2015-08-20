@@ -26,4 +26,5 @@ public class Constants {
     public static final String ACTUAL_POSITION = "actual_position";
     public static final String TRACK_SELECTED = "track_selected";
     public static final String TRACK_MODEL_RESULT = "track_model_result";
+    public static final String ARTIST_MODEL_RESULT = "artist_model_result";
 }

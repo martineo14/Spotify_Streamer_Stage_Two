@@ -19,6 +19,7 @@ package ar.com.martineo14.spotifystreamer2.util;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.Image;
 import kaaes.spotify.webapi.android.models.Track;
 
@@ -41,7 +42,7 @@ public class Utils {
         if (images == null || images.size() <= 0) {
             return null;
         }
-        if (images.size() == 2) {
+        if (images.size() == 3) {
             return track.album.images.get(2).url;
         } else {
             return track.album.images.get(1).url;
@@ -54,6 +55,27 @@ public class Utils {
             return null;
         }
         return track.album.images.get(0).url;
+
+    }
+
+    public static String getSmallImageFromArtist(Artist artist) {
+        List<Image> images = artist.images;
+        if (images == null || images.size() <= 0) {
+            return null;
+        }
+        if (images.size() == 3) {
+            return artist.images.get(2).url;
+        } else {
+            return artist.images.get(1).url;
+        }
+    }
+
+    public static String getBigImageFromArtist(Artist artist) {
+        List<Image> images = artist.images;
+        if (images == null || images.size() <= 0) {
+            return null;
+        }
+        return artist.images.get(0).url;
 
     }
 }

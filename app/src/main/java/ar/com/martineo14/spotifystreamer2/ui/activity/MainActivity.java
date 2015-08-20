@@ -23,10 +23,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ar.com.martineo14.spotifystreamer2.R;
+import ar.com.martineo14.spotifystreamer2.data.model.ArtistModel;
 import ar.com.martineo14.spotifystreamer2.ui.fragment.ArtistDetailActivityFragment;
 import ar.com.martineo14.spotifystreamer2.ui.fragment.SearchArtistFragment;
 import ar.com.martineo14.spotifystreamer2.util.Constants;
-import kaaes.spotify.webapi.android.models.Artist;
 
 
 public class MainActivity extends ActionBarActivity implements SearchArtistFragment.SearchCallback {
@@ -65,14 +65,14 @@ public class MainActivity extends ActionBarActivity implements SearchArtistFragm
     }
 
     @Override
-    public void onItemSelected(Artist artist) {
+    public void onItemSelected(ArtistModel artist) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle args = new Bundle();
-            args.putString(Constants.ARTIST_ID, artist.id);
-            args.putString(Constants.ARTIST_NAME, artist.name);
+            args.putString(Constants.ARTIST_ID, artist.artistId);
+            args.putString(Constants.ARTIST_NAME, artist.artistName);
             ArtistDetailActivityFragment fragment = new ArtistDetailActivityFragment();
             fragment.setArguments(args);
 
@@ -81,8 +81,8 @@ public class MainActivity extends ActionBarActivity implements SearchArtistFragm
                     .commit();
         } else {
             Intent intent = new Intent(this, ArtistDetailActivity.class);
-            intent.putExtra(Constants.ARTIST_ID, artist.id);
-            intent.putExtra(Constants.ARTIST_NAME, artist.name);
+            intent.putExtra(Constants.ARTIST_ID, artist.artistId);
+            intent.putExtra(Constants.ARTIST_NAME, artist.artistName);
             startActivity(intent);
         }
     }

@@ -26,9 +26,11 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ar.com.martineo14.spotifystreamer2.R;
+import ar.com.martineo14.spotifystreamer2.data.model.ArtistModel;
 import ar.com.martineo14.spotifystreamer2.ui.adapter.ArtistListAdapter;
 import ar.com.martineo14.spotifystreamer2.util.Constants;
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -39,6 +41,9 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import static ar.com.martineo14.spotifystreamer2.util.Utils.getBigImageFromArtist;
+import static ar.com.martineo14.spotifystreamer2.util.Utils.getSmallImageFromArtist;
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -46,6 +51,7 @@ import retrofit.client.Response;
 public class SearchArtistFragment extends Fragment {
 
     List<Artist> artistResult;
+    ArrayList<ArtistModel> artistResultModel;
     private String artistNameSearch;
     private ArtistListAdapter artistAdapter;
     private ListView listView;
@@ -72,8 +78,14 @@ public class SearchArtistFragment extends Fragment {
 
         if (savedInstanceState != null) {
             artistNameSearch = savedInstanceState.getString(Constants.ARTIST_NAME);
-            searchView.setQuery(artistNameSearch, false);
-            updateArtistList();
+            artistResultModel = savedInstanceState.getParcelableArrayList(Constants.ARTIST_MODEL_RESULT);
+            if (artistResultModel != null) {
+                artistAdapter = new ArtistListAdapter(getActivity(), artistResultModel);
+                listView.setAdapter(artistAdapter);
+            } else {
+                searchView.setQuery(artistNameSearch, false);
+                updateArtistList();
+            }
         }
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -94,7 +106,7 @@ public class SearchArtistFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Artist artist = artistAdapter.getItem(position);
+                ArtistModel artist = artistAdapter.getItem(position);
                 ((SearchCallback) getActivity())
                         .onItemSelected(artist);
                 mPosition = position;
@@ -118,7 +130,14 @@ public class SearchArtistFragment extends Fragment {
                             Toast.LENGTH_LONG).show();
                 } else {
                     artistResult = artistsPager.artists.items;
-                    artistAdapter = new ArtistListAdapter(getActivity(), artistResult);
+                    artistResultModel = new ArrayList<ArtistModel>();
+                    for (int i = 0; i < artistsPager.artists.items.size(); i++) {
+                        Artist artist = artistsPager.artists.items.get(i);
+                        ArtistModel artistModel = new ArtistModel(artist.id, artist.name,
+                                getBigImageFromArtist(artist), getSmallImageFromArtist(artist));
+                        artistResultModel.add(artistModel);
+                    }
+                    artistAdapter = new ArtistListAdapter(getActivity(), artistResultModel);
                     listView.setAdapter(artistAdapter);
                 }
             }
@@ -136,6 +155,7 @@ public class SearchArtistFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(Constants.ARTIST_MODEL_RESULT, artistResultModel);
         outState.putString(Constants.ARTIST_NAME, artistNameSearch);
         super.onSaveInstanceState(outState);
     }
@@ -149,6 +169,6 @@ public class SearchArtistFragment extends Fragment {
         /**
          * DetailFragmentCallback for when an item has been selected.
          */
-        void onItemSelected(Artist artist);
+        void onItemSelected(ArtistModel artist);
     }
 }

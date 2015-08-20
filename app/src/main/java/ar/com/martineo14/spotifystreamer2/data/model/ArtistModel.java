@@ -36,20 +36,24 @@ public class ArtistModel implements Parcelable {
         }
 
     };
-    String artistId;
-    String artistName;
-    String artistAlbum;
+    public String artistId;
+    public String artistName;
+    public String artistImageBig;
+    public String artistImageSmall;
 
-    public ArtistModel(String artistId, String artistName, String artistAlbum) {
+    public ArtistModel(String artistId, String artistName, String artistImageBig,
+                       String artistImageSmall) {
         this.artistId = artistId;
         this.artistName = artistName;
-        this.artistAlbum = artistAlbum;
+        this.artistImageBig = artistImageBig;
+        this.artistImageSmall = artistImageSmall;
     }
 
     private ArtistModel(Parcel in) {
         artistId = in.readString();
         artistName = in.readString();
-        artistAlbum = in.readString();
+        artistImageBig = in.readString();
+        artistImageSmall = in.readString();
     }
 
     @Override
@@ -58,13 +62,14 @@ public class ArtistModel implements Parcelable {
     }
 
     public String toString() {
-        return artistName + "--" + artistAlbum;
+        return artistName;
     }
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeString(artistId);
         parcel.writeString(artistName);
-        parcel.writeString(artistAlbum);
+        parcel.writeString(artistImageBig);
+        parcel.writeString(artistImageSmall);
     }
 }

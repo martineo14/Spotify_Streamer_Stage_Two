@@ -31,40 +31,34 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import ar.com.martineo14.spotifystreamer2.R;
-import kaaes.spotify.webapi.android.models.Artist;
-import kaaes.spotify.webapi.android.models.Image;
+import ar.com.martineo14.spotifystreamer2.data.model.ArtistModel;
 
 /**
  * Created by sergiomartinpueyo on 6/27/15.
  */
-public class ArtistListAdapter extends ArrayAdapter<Artist> {
+public class ArtistListAdapter extends ArrayAdapter<ArtistModel> {
 
     private Context context;
 
-    public ArtistListAdapter(Activity context, List<Artist> artistModels) {
+    public ArtistListAdapter(Activity context, List<ArtistModel> artistModels) {
         super(context, 0, artistModels);
         this.context = context;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Artist artistModel = getItem(position);
+        ArtistModel artistModel = getItem(position);
         View rootView = LayoutInflater.from(getContext()).inflate(R.layout.artist_line_item, parent, false);
 
         ImageView artist_image = (ImageView) rootView.findViewById(R.id.img_artist_line_item);
-        List<Image> images = artistModel.images;
-        if (images == null || images.size() <= 0) {
+        if (artistModel.artistImageBig == null) {
             //http://www.the-music-shop.com/wp-content/uploads/2015/02/placeholder.png
             Picasso.with(context).load(R.drawable.placeholder_music).into(artist_image);
         } else {
-            if (images.size() < 3) {
-                Picasso.with(context).load(artistModel.images.get(0).url).into(artist_image);
-            } else {
-                Picasso.with(context).load(artistModel.images.get(2).url).into(artist_image);
-            }
+            Picasso.with(context).load(artistModel.artistImageBig).into(artist_image);
         }
         TextView artist_name = (TextView) rootView.findViewById(R.id.name_artist_line_item);
-        artist_name.setText(artistModel.name);
+        artist_name.setText(artistModel.artistName);
 
         return rootView;
     }
