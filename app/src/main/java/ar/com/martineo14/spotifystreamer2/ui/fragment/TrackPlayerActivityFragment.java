@@ -192,15 +192,15 @@ public class TrackPlayerActivityFragment extends DialogFragment {
     }
 
     public TrackModel getTrackModel(Integer position) {
-        TrackModel trackModel = null;
+        TrackModel track_Model = null;
         Track track = ArtistDetailActivityFragment.tracksResult.get(position);
         if (track != null) {
-            trackModel = new TrackModel(ArtistDetailActivityFragment.mArtistIDStr,
+            track_Model = new TrackModel(ArtistDetailActivityFragment.mArtistIDStr,
                     ArtistDetailActivityFragment.mArtistNameSrt, track.album.name,
                     getBigImageFromTrack(track), getSmallImageFromTrack(track), track.id,
                     track.name, track.preview_url, position);
         }
-        return trackModel;
+        return track_Model;
     }
 
 
@@ -210,6 +210,7 @@ public class TrackPlayerActivityFragment extends DialogFragment {
     }
 
     public void displayTrack(TrackModel trackModel) {
+        this.trackModel = trackModel;
         buttonPlayPause.setImageResource(android.R.drawable.ic_media_play);
         mActualPosition = trackModel.trackPosition;
         artistNameTextView.setText(trackModel.artistName);
