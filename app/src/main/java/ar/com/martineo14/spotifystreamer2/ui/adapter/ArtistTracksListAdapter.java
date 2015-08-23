@@ -56,7 +56,7 @@ public class ArtistTracksListAdapter extends ArrayAdapter<TrackModel> {
         artist_album_name.setText(trackModel.artistAlbum);
 
         TextView artist_track_name = (TextView) rootView.findViewById(R.id.track_name_artist_top_ten_item);
-        artist_track_name.setText(trackModel.artistName);
+        artist_track_name.setText(trackModel.trackName);
 
         return rootView;
     }
